@@ -1,4 +1,6 @@
+from unicodedata import category
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import PermissionsMixin 
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
@@ -61,13 +63,62 @@ class CustomUserProfile(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=500)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.name
+
+
 class Post(models.Model):
-    title = models.CharField(max_length=100)
-    body = models.TextField()
-    date = models.DateTimeField()
+
+    class PostObjects(models.Manager):
+        def get_queryset(self):
+            return super(self).get_queryset().filter(status='published')
+
+    options = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
+
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
+
+    title = models.CharField(max_length=150)
+    excerpt = models.TextField(null=True, blank=True)
+    content = models.TextField()
+    slug = models.SlugField(max_length=255, unique_for_date='publish_date', null=False, unique=True)
+    published = models.DateField(default=timezone.now)
+    author = models.ForeignKey(CustomUserProfile, on_delete=models.CASCADE, related_name='blog_posts')
+    status = models.CharField(max_length=10, choices=options, default='draft')
+
     image = models.ImageField(upload_to='images/')
     image2 = models.ImageField(upload_to='images/')
     image3 = models.ImageField(upload_to='images/')
 
+    objects = models.Manager() # The default manager.
+    postobjects = PostObjects()  # The custom manager.
+
+    class Meta:
+        ordering = ['-published']
+
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    content = models.TextField()
+    publish = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=False) 
+
+    class Meta:
+        ordering = ['publish'] 
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.name, self.post)
