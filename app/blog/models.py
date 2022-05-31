@@ -78,7 +78,7 @@ class Post(models.Model):
 
     class PostObjects(models.Manager):
         def get_queryset(self):
-            return super(self).get_queryset().filter(status='published')
+            return super().get_queryset().filter(status='published')
 
     options = (
         ('draft', 'Draft'),
@@ -90,7 +90,7 @@ class Post(models.Model):
     title = models.CharField(max_length=150)
     excerpt = models.TextField(null=True, blank=True)
     content = models.TextField()
-    slug = models.SlugField(max_length=255, unique_for_date='publish_date', null=False, unique=True)
+    slug = models.SlugField(max_length=255, unique_for_date='published', null=False, unique=True)
     published = models.DateField(default=timezone.now)
     author = models.ForeignKey(CustomUserProfile, on_delete=models.CASCADE, related_name='blog_posts')
     status = models.CharField(max_length=10, choices=options, default='draft')
