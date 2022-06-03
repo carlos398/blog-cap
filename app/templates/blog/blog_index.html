@@ -12,8 +12,15 @@
             <div class='BlogsContainer'>
                 {% for post in posts  %}
                     <a href="{% url 'blog:post-detail' slug=post.slug %}" class='BlogCard' >
-                        <h2>{{ post.title }}</h2>
-                        <p>{{ post.excerpt }}</p>
+                        <div class="CardImage">
+                            <img src="/media/{{post.image}}" alt="">
+                        </div>
+                        <div class="CardTitle">
+                            <h2>{{ post.title }}</h2>
+                        </div>
+                        <div class="cardContent">
+                            <p>{{ post.excerpt }}</p>
+                        </div>
                     </a>
                 {% endfor %}
             </div>
