@@ -20,6 +20,7 @@ body{
     background-image: url('/static/img/bg30s.jpg');
     background-size: auto;
     background-position: center;
+    position: relative;
 }
 
 .container .TitleContainer h1{
@@ -49,23 +50,25 @@ body{
 }
 
 .container .BlogsContainer .BlogCard{
-    width: 90%;
+    width: 80%;
+    height: 350px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: column;;
     align-items: center;
     border-radius: 20px;
-    background-color: rgba(39, 39, 38, 0.671);
+    background-color: rgba(247, 204, 86, 0.671);
     box-shadow: 0px 0px 10px rgb(24, 23, 23);
     text-decoration: none;
-    color: white;
+    color: rgb(43, 42, 42);
+    overflow: hidden;
 }
 
 .BlogCard .CardImage{
     width: 100%;
-    height: 400px;
-    border-radius: 20px;
-    
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .BlogCard .CardImage img{
@@ -74,5 +77,43 @@ body{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.AddContainer{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(247, 204, 86);
     border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    transition: .6s;
+}
+
+.AddContainer .AddIcon{
+    font-size: 45px;
+    margin-right: 10px;
+    transition: .6s;
+}
+
+.AddContainer .AddText{
+    transition: .6s;
+    font-size: 18px;
+    display: none;
+}
+
+.AddContainer:hover{
+    transition: .6s;
+    box-shadow: 0px 0px 10px rgb(24, 23, 23);
+}
+
+.AddContainer:hover .AddText{
+    transition: .6s;
+    display: block;
 }
